@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+:root {
+  --background: #e8eef2;
+  --foreground: #15232d;
+  --muted: #5a6b76;
+  --partner: #0f4c5c;
+  --panel: #f5f8fa;
+  --panel-border: rgba(21, 35, 45, 0.08);
+  --level-border: rgba(21, 35, 45, 0.14);
+  --accent: #0f6e7c;
+  --accent-soft: #3a8f9b;
+  --mic-bg: #ffffff;
+  --ready: #2f7d57;
+  --danger: #b42318;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+}
+
+body {
+  min-height: 100dvh;
+  overflow-x: hidden;
+  color: var(--foreground);
+  font-family: var(--font-sans), "Source Sans 3", sans-serif;
+  background:
+    radial-gradient(ellipse 85% 55% at 0% 0%, rgba(15, 110, 124, 0.16), transparent 55%),
+    radial-gradient(ellipse 70% 45% at 100% 10%, rgba(47, 125, 87, 0.12), transparent 50%),
+    linear-gradient(165deg, #f0f5f7 0%, var(--background) 48%, #dde7ec 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@keyframes land-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes land-image-in {
+  from {
+    opacity: 0;
+    transform: scale(1.06);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.land-fade-up {
+  animation: land-fade-up 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.land-fade-up-delay-1 {
+  animation-delay: 0.12s;
+}
+
+.land-fade-up-delay-2 {
+  animation-delay: 0.24s;
+}
+
+.land-fade-up-delay-3 {
+  animation-delay: 0.36s;
+}
+
+.land-image-in {
+  animation: land-image-in 1.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .land-fade-up,
+  .land-image-in {
+    animation: none;
+  }
+}
