@@ -1,1 +1,1 @@
-export { Conversation } from "./Conversation.full";
+PLACEHOLDER_READ_FROM_FILE
