@@ -116,11 +116,14 @@ export function PracticeCalendar({ view, onViewChange, headerRight }: PracticeCa
   };
 
   return (
-    <div className="mx-auto flex h-dvh w-full max-w-2xl flex-col overflow-hidden px-5 pb-5 pt-6 sm:px-8 sm:pb-6 sm:pt-8">
-      <header className="mb-4 shrink-0 text-center">
-        <div className="mb-3 flex items-center justify-between gap-3">
+    <div className="mx-auto flex h-dvh w-full max-w-3xl flex-col overflow-hidden px-4 pb-4 pt-4 sm:max-w-4xl sm:px-6 sm:pb-5 sm:pt-5 lg:max-w-5xl lg:px-8">
+      <header className="mb-3 shrink-0">
+        <div className="flex items-center justify-between gap-3">
           <ViewTabs view={view} onChange={onViewChange} />
-          <div className="flex items-center gap-2">
+          <h1 className="min-w-0 flex-1 text-center font-[family-name:var(--font-display)] text-xl tracking-tight text-[var(--foreground)] sm:text-2xl">
+            Consistency
+          </h1>
+          <div className="flex shrink-0 items-center gap-2">
             {headerRight}
             <button
               type="button"
@@ -131,10 +134,7 @@ export function PracticeCalendar({ view, onViewChange, headerRight }: PracticeCa
             </button>
           </div>
         </div>
-        <h1 className="font-[family-name:var(--font-display)] text-3xl tracking-tight text-[var(--foreground)] sm:text-4xl">
-          Consistency
-        </h1>
-        <p className="mt-2 text-sm text-[var(--muted)]">
+        <p className="mt-2 text-center text-sm text-[var(--muted)]">
           See which days you showed up for Crosstalk.
         </p>
       </header>
