@@ -1,1 +1,1 @@
-@/workspace/components/Conversation.tsx
+export { Conversation } from "./Conversation.full";
