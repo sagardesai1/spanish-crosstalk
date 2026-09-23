@@ -53,16 +53,16 @@ export function Message({ role, content, speakerName = "Mateo" }: MessageProps) 
     >
       <div
         className={[
-          "max-w-[85%] px-1 py-2",
+          "w-full max-w-[min(40rem,92%)] px-1 py-2.5",
           isUser ? "text-right" : "text-left",
         ].join(" ")}
       >
-        <p className="mb-1 text-[11px] uppercase tracking-[0.14em] text-[var(--muted)]">
+        <p className="mb-1.5 text-[11px] uppercase tracking-[0.14em] text-[var(--muted)]">
           {isUser ? "You" : speakerName}
         </p>
         <p
           className={[
-            "text-[1.05rem] leading-relaxed",
+            "text-[1.125rem] leading-[1.65] sm:text-[1.2rem]",
             isUser ? "text-[var(--foreground)]" : "text-[var(--partner)]",
           ].join(" ")}
         >
