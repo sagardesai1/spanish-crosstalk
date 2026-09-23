@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
-import { applySubscriptionUpdate, clearSubscriptionForCustomer } from "@/lib/billing";
 import { getStripe, isStripeConfigured } from "@/lib/stripe";
 
 export const runtime = "nodejs";
@@ -9,48 +8,6 @@ export const maxDuration = 30;
 function periodEndFromSubscription(subscription: Stripe.Subscription): number | null {
   const fromItem = subscription.items.data[0]?.current_period_end;
   return typeof fromItem === "number" ? fromItem : null;
-}
-
-async function syncSubscription(
-  subscription: Stripe.Subscription,
-  userIdHint?: string | null,
-): Promise<void> {
-  const customerId =
-    typeof subscription.customer === "string"
-      ? subscription.customer
-      : subscription.customer?.id;
-  await applySubscriptionUpdate({
-    userId: userIdHint ?? subscription.metadata?.firebaseUid ?? null,
-    customerId: customerId ?? null,
-    subscriptionId: subscription.id,
-    status: subscription.status,
-    priceId: subscription.items.data[0]?.price.id ?? null,
-    currentPeriodEnd: periodEndFromSubscription(subscription),
-  });
-}
-
-async function fulfillCheckoutSession(session: Stripe.Checkout.Session): Promise<void> {
-  if (session.mode !== "subscription") return;
-  // Only grant access once payment succeeded (or no payment due, e.g. $0 trial).
-  if (
-    session.payment_status !== "paid" &&
-    session.payment_status !== "no_payment_required"
-  ) {
-    return;
-  }
-
-  const subscriptionId =
-    typeof session.subscription === "string"
-      ? session.subscription
-      : session.subscription?.id;
-  if (!subscriptionId) return;
-
-  const stripe = getStripe();
-  const subscription = await stripe.subscriptions.retrieve(subscriptionId);
-  await syncSubscription(
-    subscription,
-    session.metadata?.firebaseUid ?? session.client_reference_id,
-  );
 }
 
 export async function POST(request: Request) {
@@ -77,6 +34,50 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Webhook signature verification failed", error);
     return NextResponse.json({ error: "Invalid signature." }, { status: 400 });
+  }
+
+  // Lazy-load Firestore billing helpers only after signature verification so
+  // missing/invalid signature requests never pull firebase-admin into the cold path.
+  const { applySubscriptionUpdate, clearSubscriptionForCustomer } = await import("@/lib/billing");
+
+  async function syncSubscription(
+    subscription: Stripe.Subscription,
+    userIdHint?: string | null,
+  ): Promise<void> {
+    const customerId =
+      typeof subscription.customer === "string"
+        ? subscription.customer
+        : subscription.customer?.id;
+    await applySubscriptionUpdate({
+      userId: userIdHint ?? subscription.metadata?.firebaseUid ?? null,
+      customerId: customerId ?? null,
+      subscriptionId: subscription.id,
+      status: subscription.status,
+      priceId: subscription.items.data[0]?.price.id ?? null,
+      currentPeriodEnd: periodEndFromSubscription(subscription),
+    });
+  }
+
+  async function fulfillCheckoutSession(session: Stripe.Checkout.Session): Promise<void> {
+    if (session.mode !== "subscription") return;
+    if (
+      session.payment_status !== "paid" &&
+      session.payment_status !== "no_payment_required"
+    ) {
+      return;
+    }
+
+    const subscriptionId =
+      typeof session.subscription === "string"
+        ? session.subscription
+        : session.subscription?.id;
+    if (!subscriptionId) return;
+
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+    await syncSubscription(
+      subscription,
+      session.metadata?.firebaseUid ?? session.client_reference_id,
+    );
   }
 
   try {
