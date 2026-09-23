@@ -42,9 +42,9 @@ export const metadata: Metadata = {
     siteName: siteTitle,
     images: [
       {
-        url: "/images/valencia-hero.jpg",
-        width: 1280,
-        height: 960,
+        url: "https://images.unsplash.com/photo-1564221710304-0b37c8b9d729?auto=format&fit=crop&w=1200&q=80",
+        width: 1200,
+        height: 800,
         alt: "Plaza de la Virgen in Valencia, Spain",
       },
     ],
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${siteTitle} — Practice Spanish by Talking`,
     description: siteDescription,
-    images: ["/images/valencia-hero.jpg"],
+    images: ["https://images.unsplash.com/photo-1564221710304-0b37c8b9d729?auto=format&fit=crop&w=1200&q=80"],
   },
   robots: {
     index: true,

@@ -19,7 +19,7 @@ export function LandingPage() {
       <section className="relative min-h-dvh overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/images/valencia-hero.jpg"
+            src="https://images.unsplash.com/photo-1564221710304-0b37c8b9d729?auto=format&fit=crop&w=2400&q=80"
             alt="Plaza de la Virgen in Valencia, Spain"
             fill
             priority
