@@ -1,4 +1,4 @@
-"use client";
+use client";
 
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useAuth } from "@/components/AuthProvider";
@@ -139,137 +139,140 @@ export function PracticeCalendar({ view, onViewChange, headerRight }: PracticeCa
         </p>
       </header>
 
-      <section className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-[1.5rem] border border-[var(--panel-border)] bg-[var(--panel)]/80 shadow-[0_20px_60px_rgba(28,42,36,0.06)] backdrop-blur-sm">
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 py-5 sm:px-7">
-          <div className="mb-5 flex items-center justify-between gap-3">
-            <button
-              type="button"
-              onClick={() => shiftMonth(-1)}
-              className="rounded-lg border border-[var(--level-border)] px-3 py-1.5 text-sm text-[var(--muted)] hover:text-[var(--foreground)]"
-            >
-              Prev
-            </button>
-            <h2 className="font-[family-name:var(--font-display)] text-xl text-[var(--foreground)]">
-              {monthLabel(year, month)}
-            </h2>
-            <button
-              type="button"
-              onClick={() => shiftMonth(1)}
-              className="rounded-lg border border-[var(--level-border)] px-3 py-1.5 text-sm text-[var(--muted)] hover:text-[var(--foreground)]"
-            >
-              Next
-            </button>
-          </div>
+      <section className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-[1.35rem] border border-[var(--panel-border)] bg-[var(--panel)]/85 shadow-[0_20px_60px_rgba(28,42,36,0.06)] backdrop-blur-sm">
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4 sm:px-6 sm:py-5">
+          {/* Keep calendar content readable — wide shell made day cells look zoomed-in. */}
+          <div className="mx-auto w-full max-w-md">
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <button
+                type="button"
+                onClick={() => shiftMonth(-1)}
+                className="rounded-lg border border-[var(--level-border)] px-2.5 py-1 text-xs text-[var(--muted)] hover:text-[var(--foreground)]"
+              >
+                Prev
+              </button>
+              <h2 className="font-[family-name:var(--font-display)] text-lg text-[var(--foreground)]">
+                {monthLabel(year, month)}
+              </h2>
+              <button
+                type="button"
+                onClick={() => shiftMonth(1)}
+                className="rounded-lg border border-[var(--level-border)] px-2.5 py-1 text-xs text-[var(--muted)] hover:text-[var(--foreground)]"
+              >
+                Next
+              </button>
+            </div>
 
-          {error ? <p className="mb-4 text-sm text-[var(--danger)]">{error}</p> : null}
+            {error ? <p className="mb-3 text-sm text-[var(--danger)]">{error}</p> : null}
 
-          <div className="mb-5 grid grid-cols-3 gap-3 text-center">
-            <Stat
-              label="Practiced"
-              value={loading ? "…" : String(data?.practicedDays ?? 0)}
-              hint="days"
-            />
-            <Stat
-              label="Goals hit"
-              value={loading ? "…" : String(data?.goalHitDays ?? 0)}
-              hint="days"
-            />
-            <Stat
-              label="Streak"
-              value={loading ? "…" : String(data?.currentStreak ?? 0)}
-              hint="days"
-            />
-          </div>
+            <div className="mb-4 grid grid-cols-3 gap-2 text-center">
+              <Stat
+                label="Practiced"
+                value={loading ? "…" : String(data?.practicedDays ?? 0)}
+                hint="days"
+              />
+              <Stat
+                label="Goals hit"
+                value={loading ? "…" : String(data?.goalHitDays ?? 0)}
+                hint="days"
+              />
+              <Stat
+                label="Streak"
+                value={loading ? "…" : String(data?.currentStreak ?? 0)}
+                hint="days"
+              />
+            </div>
 
-          <label className="mb-5 flex items-center justify-between gap-3 rounded-xl border border-[var(--panel-border)] bg-white/70 px-3.5 py-2.5 text-sm">
-            <span className="text-[var(--muted)]">Daily goal</span>
-            <select
-              className="rounded-md border border-[var(--level-border)] bg-white px-2 py-1.5 text-sm text-[var(--foreground)]"
-              value={data?.dailyGoalMinutes ?? 20}
-              disabled={loading}
-              onChange={(e) => {
-                const minutes = Number(e.target.value);
-                if (!userId) return;
-                void postProgress({ userId, dailyGoalMinutes: minutes })
-                  .then(() => setReloadToken((value) => value + 1))
-                  .catch((err: unknown) => {
-                    console.error(err);
-                    setError(
-                      err instanceof Error ? err.message : "Couldn't save daily goal.",
-                    );
-                  });
-              }}
-              aria-label="Set daily practice goal"
-            >
-              {DAILY_GOAL_OPTIONS.map((minutes) => (
-                <option key={minutes} value={minutes}>
-                  {minutes} minutes
-                </option>
+            <label className="mb-4 flex items-center justify-between gap-3 rounded-lg border border-[var(--panel-border)] bg-white/70 px-3 py-2 text-xs">
+              <span className="text-[var(--muted)]">Daily goal</span>
+              <select
+                className="rounded-md border border-[var(--level-border)] bg-white px-2 py-1 text-xs text-[var(--foreground)]"
+                value={data?.dailyGoalMinutes ?? 20}
+                disabled={loading}
+                onChange={(e) => {
+                  const minutes = Number(e.target.value);
+                  if (!userId) return;
+                  void postProgress({ userId, dailyGoalMinutes: minutes })
+                    .then(() => setReloadToken((value) => value + 1))
+                    .catch((err: unknown) => {
+                      console.error(err);
+                      setError(
+                        err instanceof Error ? err.message : "Couldn't save daily goal.",
+                      );
+                    });
+                }}
+                aria-label="Set daily practice goal"
+              >
+                {DAILY_GOAL_OPTIONS.map((minutes) => (
+                  <option key={minutes} value={minutes}>
+                    {minutes} minutes
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <div className="mb-1.5 grid grid-cols-7 gap-1 text-center text-[10px] uppercase tracking-[0.08em] text-[var(--muted)]">
+              {WEEKDAYS.map((day) => (
+                <div key={day}>{day.slice(0, 3)}</div>
               ))}
-            </select>
-          </label>
+            </div>
 
-          <div className="mb-2 grid grid-cols-7 gap-1.5 text-center text-[11px] uppercase tracking-[0.08em] text-[var(--muted)]">
-            {WEEKDAYS.map((day) => (
-              <div key={day}>{day}</div>
-            ))}
-          </div>
+            <div className="grid grid-cols-7 gap-1">
+              {cells.map((cell) => {
+                if (!cell.date || cell.dayNum == null) {
+                  return <div key={cell.key} className="h-9 sm:h-10" />;
+                }
+                const day = dayMap.get(cell.date);
+                const isToday = cell.date === todayKey;
+                const isSelected = cell.date === selectedDate;
+                return (
+                  <button
+                    key={cell.key}
+                    type="button"
+                    onClick={() => setSelectedDate(cell.date)}
+                    className={[
+                      "flex h-9 items-center justify-center rounded-md text-xs tabular-nums transition sm:h-10",
+                      intensityClass(day, data?.dailyGoalMinutes ?? 20),
+                      isToday ? "ring-2 ring-[var(--accent)] ring-offset-1" : "",
+                      isSelected
+                        ? "outline outline-2 outline-offset-1 outline-[var(--foreground)]"
+                        : "",
+                    ].join(" ")}
+                    aria-label={`${cell.date}${day && day.seconds > 0 ? `, ${day.minutes} minutes` : ", no practice"}`}
+                  >
+                    {cell.dayNum}
+                  </button>
+                );
+              })}
+            </div>
 
-          <div className="grid grid-cols-7 gap-1.5">
-            {cells.map((cell) => {
-              if (!cell.date || cell.dayNum == null) {
-                return <div key={cell.key} className="aspect-square" />;
-              }
-              const day = dayMap.get(cell.date);
-              const isToday = cell.date === todayKey;
-              const isSelected = cell.date === selectedDate;
-              return (
-                <button
-                  key={cell.key}
-                  type="button"
-                  onClick={() => setSelectedDate(cell.date)}
-                  className={[
-                    "aspect-square rounded-lg text-sm tabular-nums transition",
-                    intensityClass(day, data?.dailyGoalMinutes ?? 20),
-                    isToday ? "ring-2 ring-[var(--accent)] ring-offset-1" : "",
-                    isSelected
-                      ? "outline outline-2 outline-offset-1 outline-[var(--foreground)]"
-                      : "",
-                  ].join(" ")}
-                  aria-label={`${cell.date}${day && day.seconds > 0 ? `, ${day.minutes} minutes` : ", no practice"}`}
-                >
-                  {cell.dayNum}
-                </button>
-              );
-            })}
-          </div>
+            <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-[var(--muted)]">
+              <Legend swatch="bg-[rgba(21,35,45,0.04)]" label="None" />
+              <Legend swatch="bg-[rgba(15,110,124,0.25)]" label="Some" />
+              <Legend swatch="bg-[rgba(15,110,124,0.55)]" label="Halfway+" />
+              <Legend swatch="bg-[var(--ready)]" label="Goal hit" />
+            </div>
 
-          <div className="mt-5 flex flex-wrap items-center gap-3 text-xs text-[var(--muted)]">
-            <Legend swatch="bg-[rgba(21,35,45,0.04)]" label="None" />
-            <Legend swatch="bg-[rgba(15,110,124,0.25)]" label="Some" />
-            <Legend swatch="bg-[rgba(15,110,124,0.55)]" label="Halfway+" />
-            <Legend swatch="bg-[var(--ready)]" label="Goal hit" />
-          </div>
-
-          <div className="mt-5 rounded-xl border border-[var(--panel-border)] bg-white/70 px-4 py-3 text-sm text-[var(--foreground)]">
-            {selected ? (
-              selected.seconds > 0 ? (
-                <p>
-                  <span className="font-medium">{selected.date}</span>
-                  {" · "}
-                  {selected.minutes} min practiced
-                  {selected.goalHit ? " · daily goal hit" : ""}
-                </p>
+            <div className="mt-4 rounded-lg border border-[var(--panel-border)] bg-white/70 px-3 py-2.5 text-sm text-[var(--foreground)]">
+              {selected ? (
+                selected.seconds > 0 ? (
+                  <p>
+                    <span className="font-medium">{selected.date}</span>
+                    {" · "}
+                    {selected.minutes} min practiced
+                    {selected.goalHit ? " · daily goal hit" : ""}
+                  </p>
+                ) : (
+                  <p>
+                    <span className="font-medium">{selected.date}</span>
+                    {" · "}
+                    no practice logged
+                  </p>
+                )
               ) : (
-                <p>
-                  <span className="font-medium">{selected.date}</span>
-                  {" · "}
-                  no practice logged
-                </p>
-              )
-            ) : (
-              <p className="text-[var(--muted)]">Tap a day to see details.</p>
-            )}
+                <p className="text-[var(--muted)]">Tap a day to see details.</p>
+              )}
+            </div>
           </div>
         </div>
       </section>
@@ -287,12 +290,12 @@ function Stat({
   hint: string;
 }) {
   return (
-    <div className="rounded-xl border border-[var(--panel-border)] bg-white/70 px-2 py-3">
-      <p className="text-[11px] uppercase tracking-[0.12em] text-[var(--muted)]">{label}</p>
-      <p className="mt-1 font-[family-name:var(--font-display)] text-2xl tabular-nums text-[var(--foreground)]">
+    <div className="rounded-lg border border-[var(--panel-border)] bg-white/70 px-2 py-2">
+      <p className="text-[10px] uppercase tracking-[0.12em] text-[var(--muted)]">{label}</p>
+      <p className="mt-0.5 font-[family-name:var(--font-display)] text-xl tabular-nums leading-none text-[var(--foreground)]">
         {value}
       </p>
-      <p className="text-xs text-[var(--muted)]">{hint}</p>
+      <p className="mt-0.5 text-[11px] text-[var(--muted)]">{hint}</p>
     </div>
   );
 }
