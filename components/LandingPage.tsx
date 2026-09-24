@@ -10,6 +10,9 @@ function practiceHref(signedIn: boolean, path = "/practice"): string {
   return `/signin?next=${encodeURIComponent(path)}`;
 }
 
+const freeMinutes = process.env.NEXT_PUBLIC_FREE_DAILY_MINUTES ?? "15";
+const priceLabel = process.env.NEXT_PUBLIC_STRIPE_PRICE_LABEL ?? "$15";
+
 export function LandingPage() {
   const { ready, user } = useAuth();
   const signedIn = ready && !!user;
@@ -46,24 +49,24 @@ export function LandingPage() {
               Spanish Crosstalk
             </h1>
             <p className="land-fade-up land-fade-up-delay-1 mt-5 max-w-xl font-[family-name:var(--font-display)] text-[clamp(1.35rem,3.4vw,2rem)] leading-snug text-white/95">
-              Speak English. Hear Spanish. Get fluent by talking.
+              Speak English. Hear real Spanish back.
             </p>
             <p className="land-fade-up land-fade-up-delay-2 mt-4 max-w-lg text-base leading-relaxed text-white/80 sm:text-lg">
-              Daily conversation with Mateo in Valencia — you talk naturally, he replies in simple
-              Spanish you can actually follow.
+              Daily comprehensible conversation with Mateo — Spanish-only practice for beginners who
+              want input first, not another drill app.
             </p>
             <div className="land-fade-up land-fade-up-delay-3 mt-8 flex flex-wrap items-center gap-3">
               <Link
                 href={practiceHref(signedIn)}
                 className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-[var(--partner)] transition hover:bg-white/95"
               >
-                {signedIn ? "Continue practicing" : "Sign in to practice free"}
+                {signedIn ? "Continue practicing" : "Start free — no card needed"}
               </Link>
               <a
-                href="#how-it-works"
+                href="#why"
                 className="inline-flex items-center justify-center rounded-full border border-white/40 px-5 py-3 text-sm font-medium text-white transition hover:border-white/70"
               >
-                See how it works
+                Why this works
               </a>
             </div>
           </div>
@@ -71,68 +74,124 @@ export function LandingPage() {
       </section>
 
       <section
-        id="how-it-works"
+        id="why"
         className="mx-auto w-full max-w-3xl px-5 py-20 sm:px-8 sm:py-24"
-        aria-labelledby="how-heading"
+        aria-labelledby="why-heading"
       >
         <h2
-          id="how-heading"
+          id="why-heading"
           className="font-[family-name:var(--font-display)] text-3xl tracking-tight text-[var(--foreground)] sm:text-4xl"
         >
-          How Crosstalk practice works
+          Spanish the way you actually acquire it
         </h2>
         <p className="mt-3 max-w-2xl text-base leading-relaxed text-[var(--muted)] sm:text-lg">
-          No vocabulary lists. No grammar drills. Just a short daily conversation that builds real
-          Spanish listening and speaking confidence.
+          Dreaming Spanish proved bingeable comprehensible input works. Spanish Crosstalk applies
+          that idea to live conversation: you stay comfortable in English while Mateo floods you
+          with Spanish you can follow.
         </p>
+        <ul className="mt-10 space-y-6 text-base leading-relaxed text-[var(--muted)] sm:text-lg">
+          <li>
+            <span className="font-medium text-[var(--foreground)]">Spanish only.</span> No
+            forty-language distraction. Every session is built for English speakers learning Spanish.
+          </li>
+          <li>
+            <span className="font-medium text-[var(--foreground)]">Input before pressure.</span> You
+            don’t have to produce perfect Spanish on day one. You listen, understand, and build the
+            ear first.
+          </li>
+          <li>
+            <span className="font-medium text-[var(--foreground)]">Voice, not homework.</span> Open
+            the mic, talk about your day, and get Spanish back aloud — with Translate when a phrase
+            slips past you.
+          </li>
+        </ul>
+      </section>
 
-        <ol className="mt-12 space-y-10">
-          <li>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
-              01 — Speak
-            </p>
-            <h3 className="mt-2 font-[family-name:var(--font-display)] text-2xl text-[var(--foreground)]">
-              Talk in English about your day
-            </h3>
-            <p className="mt-2 max-w-xl text-[var(--muted)] leading-relaxed">
-              Keep the mic open and speak naturally. Continuous mode sends your turn after a short
-              pause — like a real chat.
-            </p>
-          </li>
-          <li>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
-              02 — Hear
-            </p>
-            <h3 className="mt-2 font-[family-name:var(--font-display)] text-2xl text-[var(--foreground)]">
-              Mateo answers in simple Spanish
-            </h3>
-            <p className="mt-2 max-w-xl text-[var(--muted)] leading-relaxed">
-              Your partner replies aloud in clear A1–A2 Spanish, tuned to Spain or Latin America
-              and the pace you choose.
-            </p>
-          </li>
-          <li>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
-              03 — Return
-            </p>
-            <h3 className="mt-2 font-[family-name:var(--font-display)] text-2xl text-[var(--foreground)]">
-              Show up for a few minutes a day
-            </h3>
-            <p className="mt-2 max-w-xl text-[var(--muted)] leading-relaxed">
-              Progress saves to your account — streak, daily goal, and today’s chat — so practice
-              compounds instead of resetting.
-            </p>
-          </li>
-        </ol>
-
-        <div className="mt-14">
-          <Link
-            href={practiceHref(signedIn)}
-            className="inline-flex items-center justify-center rounded-full bg-[var(--accent)] px-6 py-3 text-sm font-semibold text-white transition hover:opacity-95"
+      <section
+        id="how-it-works"
+        className="border-t border-[var(--panel-border)] bg-[var(--panel)]/50"
+        aria-labelledby="how-heading"
+      >
+        <div className="mx-auto w-full max-w-3xl px-5 py-20 sm:px-8 sm:py-24">
+          <h2
+            id="how-heading"
+            className="font-[family-name:var(--font-display)] text-3xl tracking-tight text-[var(--foreground)] sm:text-4xl"
           >
-            {signedIn ? "Open practice" : "Sign in to start"}
-          </Link>
+            How a session works
+          </h2>
+          <p className="mt-3 max-w-2xl text-base leading-relaxed text-[var(--muted)] sm:text-lg">
+            Three minutes or thirty — the loop stays the same.
+          </p>
+
+          <ol className="mt-12 space-y-10">
+            <li>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
+                01 — Speak English
+              </p>
+              <h3 className="mt-2 font-[family-name:var(--font-display)] text-2xl text-[var(--foreground)]">
+                Say what’s on your mind
+              </h3>
+              <p className="mt-2 max-w-xl text-[var(--muted)] leading-relaxed">
+                Continuous listening sends your turn after a short pause, so it feels like a real
+                chat — not a push-to-talk quiz.
+              </p>
+            </li>
+            <li>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
+                02 — Hear Spanish
+              </p>
+              <h3 className="mt-2 font-[family-name:var(--font-display)] text-2xl text-[var(--foreground)]">
+                Mateo replies in clear beginner Spanish
+              </h3>
+              <p className="mt-2 max-w-xl text-[var(--muted)] leading-relaxed">
+                A Valencia partner answers aloud in A1–A2 Spanish. Tap Translate anytime you need the
+                English meaning, then keep going.
+              </p>
+            </li>
+            <li>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
+                03 — Come back tomorrow
+              </p>
+              <h3 className="mt-2 font-[family-name:var(--font-display)] text-2xl text-[var(--foreground)]">
+                Daily minutes that actually stick
+              </h3>
+              <p className="mt-2 max-w-xl text-[var(--muted)] leading-relaxed">
+                Your chat, streak, and goal save to your account so practice compounds instead of
+                resetting every refresh.
+              </p>
+            </li>
+          </ol>
+
+          <div className="mt-14">
+            <Link
+              href={practiceHref(signedIn)}
+              className="inline-flex items-center justify-center rounded-full bg-[var(--accent)] px-6 py-3 text-sm font-semibold text-white transition hover:opacity-95"
+            >
+              {signedIn ? "Open practice" : `Try ${freeMinutes} free minutes`}
+            </Link>
+          </div>
         </div>
+      </section>
+
+      <section
+        id="for-who"
+        className="mx-auto w-full max-w-3xl px-5 py-20 sm:px-8 sm:py-24"
+        aria-labelledby="for-who-heading"
+      >
+        <h2
+          id="for-who-heading"
+          className="font-[family-name:var(--font-display)] text-3xl tracking-tight text-[var(--foreground)] sm:text-4xl"
+        >
+          Built for beginners who bounced off drill apps
+        </h2>
+        <p className="mt-3 max-w-2xl text-base leading-relaxed text-[var(--muted)] sm:text-lg">
+          If you’ve watched CI videos and still freeze in conversation — or you hate being forced to
+          speak Spanish before you can understand it — this is for you.
+        </p>
+        <p className="mt-6 max-w-2xl text-base leading-relaxed text-[var(--muted)] sm:text-lg">
+          Travelers, partners of Spanish speakers, and A1–A2 learners who want a low-pressure daily
+          voice habit without a classroom or flashcard streak.
+        </p>
       </section>
 
       <section
@@ -145,28 +204,28 @@ export function LandingPage() {
             id="pricing-heading"
             className="font-[family-name:var(--font-display)] text-3xl tracking-tight text-[var(--foreground)] sm:text-4xl"
           >
-            Simple pricing
+            Start free. Go Pro when you want unlimited time.
           </h2>
           <p className="mt-3 max-w-2xl text-base leading-relaxed text-[var(--muted)] sm:text-lg">
-            Try Crosstalk free every day. Upgrade when you want unlimited practice minutes.
+            Enough free minutes to build the habit. Upgrade when conversations start running long.
           </p>
 
-          <div className="mt-10 grid gap-8 sm:grid-cols-2">
+          <div className="mt-10 grid gap-10 sm:grid-cols-2 sm:gap-12">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
                 Free
               </p>
               <p className="mt-2 font-[family-name:var(--font-display)] text-3xl text-[var(--foreground)]">
-                {process.env.NEXT_PUBLIC_FREE_DAILY_MINUTES ?? "15"} min / day
+                {freeMinutes} min / day
               </p>
               <p className="mt-2 text-sm leading-relaxed text-[var(--muted)]">
-                Full conversation practice with Mateo — enough to build the habit.
+                Full voice Crosstalk with Mateo, saved chat, and daily progress — no credit card.
               </p>
               <Link
                 href={practiceHref(signedIn)}
                 className="mt-6 inline-flex rounded-full border border-[var(--level-border)] px-5 py-2.5 text-sm font-medium text-[var(--foreground)] transition hover:border-[var(--accent)]"
               >
-                {signedIn ? "Start free" : "Sign in free"}
+                {signedIn ? "Keep practicing" : "Sign in free"}
               </Link>
             </div>
             <div>
@@ -174,13 +233,14 @@ export function LandingPage() {
                 Pro
               </p>
               <p className="mt-2 font-[family-name:var(--font-display)] text-3xl text-[var(--foreground)]">
-                {process.env.NEXT_PUBLIC_STRIPE_PRICE_LABEL ?? "$15"}
+                {priceLabel}
                 <span className="ml-1 text-base font-sans font-normal text-[var(--muted)]">
                   / month
                 </span>
               </p>
               <p className="mt-2 text-sm leading-relaxed text-[var(--muted)]">
-                Unlimited daily minutes, progress sync, and priority for new speaking features.
+                Unlimited daily minutes so you can stay in Spanish as long as the conversation is
+                working.
               </p>
               <Link
                 href={practiceHref(signedIn, "/practice?upgrade=1")}
@@ -193,12 +253,35 @@ export function LandingPage() {
         </div>
       </section>
 
+      <section className="mx-auto w-full max-w-3xl px-5 py-16 text-center sm:px-8 sm:py-20">
+        <h2 className="font-[family-name:var(--font-display)] text-3xl tracking-tight text-[var(--foreground)] sm:text-4xl">
+          Ready to hear Spanish today?
+        </h2>
+        <p className="mx-auto mt-3 max-w-xl text-base leading-relaxed text-[var(--muted)] sm:text-lg">
+          Sign in, start a session, and let Mateo open in Spanish. Your first conversation takes
+          under a minute to begin.
+        </p>
+        <Link
+          href={practiceHref(signedIn)}
+          className="mt-8 inline-flex items-center justify-center rounded-full bg-[var(--accent)] px-6 py-3 text-sm font-semibold text-white transition hover:opacity-95"
+        >
+          {signedIn ? "Continue with Mateo" : "Start free practice"}
+        </Link>
+      </section>
+
       <footer className="border-t border-[var(--panel-border)] px-5 py-8 text-center text-xs text-[var(--muted)] sm:px-8">
-        <p>Spanish Crosstalk — practice Spanish through conversation.</p>
+        <p>Spanish Crosstalk — comprehensible Spanish through daily conversation.</p>
         <p className="mt-2">
-          Photo: Plaza de la Virgen, Valencia.{" "}
+          <a href="#how-it-works" className="underline-offset-2 hover:underline">
+            How it works
+          </a>
+          {" · "}
+          <a href="#pricing" className="underline-offset-2 hover:underline">
+            Pricing
+          </a>
+          {" · "}
           <Link href={practiceHref(signedIn)} className="underline-offset-2 hover:underline">
-            Open practice
+            Practice
           </Link>
         </p>
       </footer>
