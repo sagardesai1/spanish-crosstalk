@@ -4,7 +4,6 @@ on:
   push:
     paths:
       - ".github/workflows/commit-package-lock.yml"
-      - "package-lock.parts/**"
       - "package.json"
 jobs:
   lock:
@@ -13,22 +12,11 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Assemble lockfile from parts if present
-        run: |
-          if [ -d package-lock.parts ] && ls package-lock.parts/*.txt >/dev/null 2>&1; then
-            cat package-lock.parts/*.txt > package-lock.json
-            echo "Assembled from parts"
-          else
-            echo "No parts; will generate"
-          fi
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Generate lockfile if missing or invalid
-        run: |
-          if ! node -e "const l=require('./package-lock.json'); if(!l.packages || !Object.keys(l.packages).length) process.exit(1)"; then
-            npm install --package-lock-only
-          fi
+      - name: Regenerate package-lock.json from package.json
+        run: npm install --package-lock-only
       - name: Commit package-lock.json
         run: |
           git config user.name "github-actions[bot]"
@@ -37,6 +25,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No lockfile changes"
           else
-            git commit -m "Add Google Analytics and Tag Manager via env vars"
+            git commit -m "Add SEOAgent blog publishing and beginner Spanish pillar post (package-lock)"
             git push
           fi
