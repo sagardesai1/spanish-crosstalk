@@ -285,6 +285,10 @@ export function LandingPage() {
             Pricing
           </a>
           {" · "}
+          <Link href="/blog" className="underline-offset-2 hover:underline">
+            Blog
+          </Link>
+          {" · "}
           <Link href={practiceHref(signedIn)} className="underline-offset-2 hover:underline">
             Practice
           </Link>
