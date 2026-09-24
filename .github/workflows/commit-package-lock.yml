@@ -37,6 +37,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No lockfile changes"
           else
-            git commit -m "Add package-lock.json for reproducible Vercel installs"
+            git commit -m "Add Google Analytics and Tag Manager via env vars"
             git push
           fi
