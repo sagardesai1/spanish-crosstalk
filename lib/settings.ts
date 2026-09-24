@@ -1,1 +1,1 @@
-FROM_DISK
+@file:///workspace/lib/settings.ts
