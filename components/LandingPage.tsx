@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { AuthControls } from "@/components/AuthControls";
+import { PracticePreview } from "@/components/PracticePreview";
 import { useAuth } from "@/components/AuthProvider";
 
 function practiceHref(signedIn: boolean, path = "/practice"): string {
@@ -122,6 +123,10 @@ export function LandingPage() {
           <p className="mt-3 max-w-2xl text-base leading-relaxed text-[var(--muted)] sm:text-lg">
             Three minutes or thirty — the loop stays the same.
           </p>
+
+          <div className="mt-10">
+            <PracticePreview />
+          </div>
 
           <ol className="mt-12 space-y-10">
             <li>
