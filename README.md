@@ -67,6 +67,8 @@ Optional:
 | `NEXT_PUBLIC_STRIPE_PRICE_LABEL` | Landing price label (default `$15`) |
 | `FREE_DAILY_MINUTES` | Free minutes/day without Pro (default `15`) |
 | `NEXT_PUBLIC_FREE_DAILY_MINUTES` | Same number shown on the landing page |
+| `NEXT_PUBLIC_GTM_ID` | Google Tag Manager container (`GTM-…`) |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Google Analytics 4 id (`G-…`); leave empty if GA4 is only fired from GTM |
 
 ### Google Cloud / Firebase
 
