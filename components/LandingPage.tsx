@@ -44,7 +44,7 @@ export function LandingPage() {
           <header className="flex items-center justify-end gap-3 px-5 py-5 sm:gap-3 sm:px-10 sm:py-6">
             <Link
               href="/blog"
-              className="rounded-lg border border-white/40 bg-white/10 px-2.5 py-1.5 text-xs font-medium text-white transition hover:border-white/70 hover:bg-white/15"
+              className="rounded-lg border border-white/60 bg-[rgba(12,28,36,0.62)] px-3 py-1.5 text-xs font-semibold text-white shadow-sm backdrop-blur-md transition hover:border-white hover:bg-[rgba(12,28,36,0.78)]"
             >
               Blog
             </Link>
