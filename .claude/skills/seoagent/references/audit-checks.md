@@ -1,0 +1,13 @@
+# Full Audit Check List
+
+Loaded by Phase 1 (Technical SEO Audit) when running a full audit. The main `SKILL.md` summarizes the categories; this reference holds the complete check list with the exact pattern to match and the recommendation text.
+
+## Verify-before-assert (read first — non-negotiable)
+
+**Every factual claim about a page's live state must be grounded in an actual fetch of the live URL — never in repo source, memory, or a prior.** Before running these checks, run `seoagent crawl` (Phase 1 Step 0). It writes `.seoagent/audit/evidence.md` — the live-crawl evidence base (exact title, meta, ALL H1s, canonical + server/client-render flag, every JSON-LD `@type`, OG/Twitter tags, per-page `<img>`-missing-alt stats, the ACTUAL robots.txt contents, the sitemap URL + blog-post counts, client-rendered-shell detection). Read that file and derive Confirmed findings from it.
+
+**Origin binding — the crawl must hit the LIVE site the user designated, and evidence.md records which origin it hit.** If the user/session provided a live URL, pass it verbatim: `seoagent crawl --url <origin>` (authoritative even when loopback — staging/preview is legitimate); otherwise the CLI uses `live_url:`/`domain:` from `project.md`, and errors if neither exists — never guess, and **never start a local dev server and crawl it as the live site**. Check the **"Crawled origin:"** line at the top of `evidence.md` before deriving findings: if the file is labeled **SOURCE RENDER (local dev server) — NOT the public live site** (`source_render: true`), it describes an undesignated local render — NO live-state finding (`Confirmed` present OR absent) may be derived from it, and `seoagent verify-recs` will refuse to verify against it. Re-crawl with `--url <live origin>` first.
+
+**An incomplete capture makes every finding a LOWER BOUND.** If `evidence.md` contains a **"Pages NOT captured"** section (`capture_complete: false` in its frontmatter), the crawl discovered pages it could not fetch — after per-page retries and a sequential re-fetch. The rollup and per-page findings then describe only the captured subset: report the code-generated "N discovered pages could not be crawled — evidence is incomplete" finding verbatim, state the incompleteness (and each failure reason) in the audit and final summary, and never treat an uncaptured page as passing any check — no claim about it (present OR absent) is Confirmed.
+
+**PLACEHOLDER_FULL_CONTENT_CONTINUES**
